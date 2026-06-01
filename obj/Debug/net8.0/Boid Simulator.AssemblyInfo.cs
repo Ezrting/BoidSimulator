@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Boid Simulator")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+44de1af4d4855883300bb78ffb72df0cf856b4aa")]
 [assembly: System.Reflection.AssemblyProductAttribute("Boid Simulator")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Boid Simulator")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

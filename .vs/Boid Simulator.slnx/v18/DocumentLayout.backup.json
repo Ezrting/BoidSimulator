@@ -7,20 +7,36 @@
       "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:graphics\\class1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\physics\\shape.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:physics\\shape.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\physics\\line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:physics\\line.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\physics\\shape.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:physics\\shape.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\gui\\textbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:gui\\textbox.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\gui\\fonts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:gui\\fonts.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:game1.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\content\\content.mgcb||{3EC6CBD1-65BD-4B26-A758-3B207D048872}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:content\\content.mgcb||{3EC6CBD1-65BD-4B26-A758-3B207D048872}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\content\\fonts\\montserrat.spritefont||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|solutionrelative:content\\fonts\\montserrat.spritefont||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{B266E1AC-C996-E642-03F6-782376265A4A}|Boid Simulator.csproj|c:\\users\\ezrat\\source\\repos\\boid simulator\\boid simulator.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -34,8 +50,22 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 7,
           "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Program.cs",
+              "RelativeDocumentMoniker": "Program.cs",
+              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Program.cs",
+              "RelativeToolTip": "Program.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAAABYAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-07T09:51:50.473Z",
+              "IsPinned": true,
+              "EditorCaption": ""
+            },
             {
               "$type": "Bookmark",
               "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -46,15 +76,51 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Program.cs",
-              "RelativeDocumentMoniker": "Program.cs",
-              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Program.cs",
-              "RelativeToolTip": "Program.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAsAAAAAAAAAA==",
+              "DocumentIndex": 7,
+              "Title": "Content.mgcb",
+              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Content\\Content.mgcb",
+              "RelativeDocumentMoniker": "Content\\Content.mgcb",
+              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Content\\Content.mgcb",
+              "RelativeToolTip": "Content\\Content.mgcb",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-15T07:39:13.061Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Fonts.cs",
+              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\GUI\\Fonts.cs",
+              "RelativeDocumentMoniker": "GUI\\Fonts.cs",
+              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\GUI\\Fonts.cs",
+              "RelativeToolTip": "GUI\\Fonts.cs",
+              "ViewState": "AgIAAAMAAAAAAAAAAAAAAA4AAABnAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-07T09:51:50.473Z",
+              "WhenOpened": "2026-05-15T07:21:41.304Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Montserrat.spritefont",
+              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Content\\Fonts\\Montserrat.spritefont",
+              "RelativeDocumentMoniker": "Content\\Fonts\\Montserrat.spritefont",
+              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Content\\Fonts\\Montserrat.spritefont",
+              "RelativeToolTip": "Content\\Fonts\\Montserrat.spritefont",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
+              "WhenOpened": "2026-05-15T07:15:02.293Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "TextBox.cs",
+              "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\GUI\\TextBox.cs",
+              "RelativeDocumentMoniker": "GUI\\TextBox.cs",
+              "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\GUI\\TextBox.cs",
+              "RelativeToolTip": "GUI\\TextBox.cs",
+              "ViewState": "AgIAAAkAAAAAAAAAAAAAAA0AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-15T06:33:34.323Z",
               "EditorCaption": ""
             },
             {
@@ -65,33 +131,33 @@
               "RelativeDocumentMoniker": "Graphics\\Class1.cs",
               "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Graphics\\Class1.cs",
               "RelativeToolTip": "Graphics\\Class1.cs",
-              "ViewState": "AgIAABQAAAAAAAAAAAAqwCAAAABHAAAAAAAAAA==",
+              "ViewState": "AgIAADAAAAAAAAAAAADwv0AAAAAZAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-07T09:15:17.587Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 2,
               "Title": "Shape.cs",
               "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Physics\\Shape.cs",
               "RelativeDocumentMoniker": "Physics\\Shape.cs",
               "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Physics\\Shape.cs",
               "RelativeToolTip": "Physics\\Shape.cs",
-              "ViewState": "AgIAAAoAAAAAAAAAAADwvxgAAAATAAAAAAAAAA==",
+              "ViewState": "AgIAAA4AAAAAAAAAAAAQwBsAAABHAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-07T09:07:58.531Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 6,
               "Title": "Game1.cs",
               "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Game1.cs",
               "RelativeDocumentMoniker": "Game1.cs",
               "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Game1.cs",
               "RelativeToolTip": "Game1.cs",
-              "ViewState": "AgIAAA0AAAAAAAAAAAAgwC0AAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAABgAAAAAAAAAAAAowC4AAAA3AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-07T08:53:48.474Z",
               "EditorCaption": ""
@@ -104,20 +170,20 @@
               "RelativeDocumentMoniker": "Physics\\Line.cs",
               "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Physics\\Line.cs",
               "RelativeToolTip": "Physics\\Line.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAABKAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-06T07:30:32.051Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 9,
               "Title": "Boid Simulator.csproj",
               "DocumentMoniker": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Boid Simulator.csproj",
               "RelativeDocumentMoniker": "Boid Simulator.csproj",
               "ToolTip": "C:\\Users\\ezrat\\source\\repos\\Boid Simulator\\Boid Simulator.csproj",
               "RelativeToolTip": "Boid Simulator.csproj",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAA4AAAAeAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
               "WhenOpened": "2026-04-06T07:30:00.911Z"
             }

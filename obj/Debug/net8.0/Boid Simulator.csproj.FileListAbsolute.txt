@@ -31,3 +31,5 @@ C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\refint\Boid Simulato
 C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\Boid Simulator.pdb
 C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\Boid Simulator.genruntimeconfig.cache
 C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\ref\Boid Simulator.dll
+C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\Boid Simulator.sourcelink.json
+C:\Users\ezrat\source\repos\Boid Simulator\bin\Debug\net8.0\Content\Fonts\Montserrat.xnb

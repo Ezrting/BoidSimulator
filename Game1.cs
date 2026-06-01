@@ -1,6 +1,8 @@
-﻿using Microsoft.Xna.Framework;
+﻿using Boid_Simulator.GUI;
+using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
+using System.ComponentModel;
 
 namespace Boid_Simulator
 {
@@ -9,11 +11,13 @@ namespace Boid_Simulator
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public static Vector2 CameraCentre;
+        public static Game1 Instance;
         public Game1()
         {
             _graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
             IsMouseVisible = true;
+            Instance = this;
         }
 
         protected override void Initialize()
@@ -47,6 +51,7 @@ namespace Boid_Simulator
             // TODO: Add your drawing code here
             Graphics.Draw(_spriteBatch);
             base.Draw(gameTime);
+            
         }
     }
 }

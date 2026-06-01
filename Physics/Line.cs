@@ -11,6 +11,19 @@ namespace Boid_Simulator
     {
         public Vector2 StartPos;
         public Vector2 EndPos;
+
+        public float Gradient
+        {
+            get {
+                if (StartPos.X == EndPos.X) return float.PositiveInfinity;
+                return StartPos.Y == EndPos.Y ? 0 : (EndPos.Y - StartPos.Y) / (EndPos.X - StartPos.X); 
+            }
+        }
+        public float YIntercept
+        {
+            get { return StartPos.Y - Gradient * StartPos.X; }
+        }
+
         public float Length
         {
             get { return Vector2.Distance(StartPos, EndPos); }
