@@ -12,7 +12,7 @@ namespace Boid_Simulator.GUI
         public Dictionary<string, SpriteFont> FontDictionary = new();
         public Fonts()
         {
-            FontDictionary["Montserrat"] = Game1.Instance.Content.Load<SpriteFont>("Fonts/Montserrat");
+            FontDictionary["Montserrat"] = GameIns.Instance.Content.Load<SpriteFont>("Fonts/Montserrat");
         }
     }
 }

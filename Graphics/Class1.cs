@@ -11,158 +11,213 @@ using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Boid_Simulator
+namespace Boid_Simulator.Graphics
 {
-    internal class Graphics
+    internal class Visualiser
     {
         public static GraphicsDevice _graphicsDevice;
+        //public static GraphicsDeviceManager _graphics;
         public static Texture2D Pixel;
         public static Fonts GraphicalFonts;
-        public static void Init(GraphicsDevice graphicsDevice)
+        private DynamicVertexBuffer _dynamicvVertexBuffer;
+        static BasicEffect _basicEffect;
+        //Visualisation Parameters
+        public static float Zoom = 1;
+        //Convert world position to screen space with camera pos and zoom.
+        public static void DrawUIElement(SpriteBatch _spriteBatch, UIElement element, Vector2 Position)
+        {
+            if (element is TextBox tb)
+            {
+                _spriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], tb.Text, Position, Color.White);
+            }
+        }
+        public static void Init(GraphicsDeviceManager _graphics, GraphicsDevice graphicsDevice)
         {
             _graphicsDevice = graphicsDevice;
             Pixel = new Texture2D(_graphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });
             GraphicalFonts = new Fonts();
+            // Adjust the back buffer size
+            _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 50;
+            _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 50;
+            _graphics.ApplyChanges();
+            //Set up and view projection matrices;
+            _basicEffect = new BasicEffect(_graphicsDevice)
+            {
+                VertexColorEnabled = true, //Basically allows the drawing to produce colour
+                World = Matrix.Identity,
+                View = Matrix.Identity,
+                Projection = Matrix.CreateOrthographicOffCenter(
+                    0,
+                    _graphicsDevice.Viewport.Width,
+                   _graphicsDevice.Viewport.Height,
+                   0,
+                   0,
+                   1)
+            };
+           
         }
         public static Shape[] AcquireShapes()
         {
             return [.. Shape.ListOfShapes];
         }
-        public static void MapPixelsToColours(Shape[] ShapesToSearchFrom, out Color[,] ColourMap, SpriteBatch SpriteBatch)
+        public static VisualisedLine[] AcquireVisualisedLines()
         {
-            int GraphicsHeight = _graphicsDevice.Viewport.Height;
-            int GraphicsWidth = _graphicsDevice.Viewport.Width;
-            for (int i = 0; i < ShapesToSearchFrom.Length; i++)
-            {
-                Shape shape = ShapesToSearchFrom[i];
-                float MaxY = float.MinValue;
-                float MinY = float.MaxValue;
-                float MaxX = float.MinValue;
-                float MinX = float.MaxValue;
-                for (int j = 0; j < shape.Lines.Length; j++)
-                {
-                    Line line = shape.Lines[j];
-                    MaxY = (int)Math.Max(MaxY, Math.Max(line.StartPos.Y, line.EndPos.Y));
-                    MinY = (int)Math.Min(MinY, Math.Min(line.StartPos.Y, line.EndPos.Y));
-
-                    MaxX = (int)Math.Max(MaxX, Math.Max(line.StartPos.X, line.EndPos.X));
-                    MinX = (int)Math.Min(MinX, Math.Min(line.StartPos.X, line.EndPos.X));
-                }
-                List<float>[] YPixelPositionsToSearchFrom = new List<float>[(int)(MaxX - MinX) + 1]; //A fixed array of a list of floats
-                for (int PixelX = (int)MinX; PixelX <= (int)MaxX; PixelX++)
-                {
-                    int Index = PixelX - (int)MinX;
-                    for (int j = 0; j < shape.Lines.Length; j++)
-                    {
-                        Line line = shape.Lines[j];
-                        int lineMinX = (int)Math.Floor(Math.Min(line.StartPos.X, line.EndPos.X));
-                        int lineMaxX = (int)Math.Ceiling(Math.Max(line.StartPos.X, line.EndPos.X));
-                        Debug.WriteLine(PixelX + "," + lineMinX + "," + lineMaxX);
-                        if (PixelX < lineMinX && PixelX > lineMaxX) // Boundary check!
-                        {
-                            continue;
-                        }
-                        float YPos = line.Gradient * PixelX + line.YIntercept;
-
-                        if (YPixelPositionsToSearchFrom[Index] == null)
-                        {
-                            YPixelPositionsToSearchFrom[Index] = new List<float>();
-                        }
-                        YPixelPositionsToSearchFrom[Index].Add(YPos); // Add the intersection to the list of intersections for this PixelX value.
-
-                    }
-                    if (YPixelPositionsToSearchFrom[Index] == null)
-                    {
-                        continue;
-                    }
-                    YPixelPositionsToSearchFrom[Index].Sort((a, b) => a.CompareTo(b));
-                    foreach(float YPos in YPixelPositionsToSearchFrom[Index])
-                    {
-                        //Debug.Write(YPos + ", ");
-                    }
-                   // Debug.WriteLine("");
-                    for (int Intersection = 0; Intersection < YPixelPositionsToSearchFrom[Index].Count; Intersection++)
-                    {
-                        if (Intersection == YPixelPositionsToSearchFrom[Index].Count - 1)
-                        {
-                            break;
-                        }
-                       // Debug.WriteLine(Intersection);
-                        if (Intersection %2 == 1) // Adds support for concave shapes //If intersection is odd, then inside the shape
-                        {
-                            float CurrentYPos = YPixelPositionsToSearchFrom[Index][Intersection]; // Current Ypos to draw from
-                            float NextYPos = YPixelPositionsToSearchFrom[Index][Intersection + 1]; // Next Ypos, get the vertical distance to fill
-                            Rectangle PixelRect = new Rectangle(
-                                     (int)(PixelX - Game1.CameraCentre.X),
-                                     (int)(CurrentYPos - Game1.CameraCentre.Y) + (int)Math.Abs(CurrentYPos - NextYPos), //Offset it by the distance from current to next, otherwise the shape will be inverted
-                                     1,
-                                     (int)(Math.Abs(CurrentYPos - NextYPos))); // The distance from current to next
-                            //get size of screen to invert y axis
-                            PixelRect.Y = GraphicsHeight - PixelRect.Y;
-                            SpriteBatch.Draw(Pixel, PixelRect, null, Color.White);
-                        }
-                    }
-                }
-                
-                
-                /*
-                for (int PixelX = (int)MinX; PixelX <= (int)MaxX; PixelX++)
-                {
-                    for (int PixelY = (int)MinY; PixelY <= (int)MaxY; PixelY++)
-                    {
-                        Rectangle PixelRect = new Rectangle(
-                                     (int)(PixelX - Game1.CameraCentre.X),
-                                     (int)(PixelY - Game1.CameraCentre.Y),
-                                     5,
-                                     5);
-                        //get size of screen to invert y axis
-                        PixelRect.Y = GraphicsHeight - PixelRect.Y;
-                        SpriteBatch.Draw(Pixel, PixelRect, null, Color.White);
-                    }
-                }
-                */
-
-            }
-            ColourMap = new Color[GraphicsWidth, GraphicsHeight];
-            return;
+            return [.. VisualisedLine.ListOfLines];
         }
+
 
         public static void Draw(SpriteBatch SpriteBatch)
         {
             int GraphicsHeight = _graphicsDevice.Viewport.Height;
             int GraphicsWidth = _graphicsDevice.Viewport.Width;
-            SpriteBatch.Begin();
+
+            Vector2 CameraPos = GameIns.CameraPos;
+            foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+            {
+                pass.Apply();
+            }
             Shape[] ShapesToDraw = AcquireShapes();
-            MapPixelsToColours(ShapesToDraw, out Color[,] ColourMap, SpriteBatch);
+            VisualisedLine[] VisualisedLinesToDraw = AcquireVisualisedLines();
+            _basicEffect.CurrentTechnique.Passes[0].Apply();
+            _graphicsDevice.RasterizerState = RasterizerState.CullNone; // to prevent clockwise triangles from being invisible
+            _graphicsDevice.BlendState = BlendState.AlphaBlend;
             for (int i = 0; i < ShapesToDraw.Length; i++)
             {
                 Shape shape = ShapesToDraw[i];
-                for (int j = 0; j < shape.Lines.Length; j++)
+                Color ShapeColour = shape.DrawColour;
+               // if (shape.Owner != null && shape.Owner.Properties.IsOutOfBounds) ShapeColour = Color.DarkRed;
+                byte alpha = (byte)(255 * (1f - shape.Transparency));
+                ShapeColour = new Color(ShapeColour.R, ShapeColour.G, ShapeColour.B, alpha);
+                //Fill in the shape
+                bool TriangulationSuccess = PolygonHelper.Triangulate(shape.Vertices, out int[] Triangles, out string error);
+                if (TriangulationSuccess)
                 {
-                    Line line = shape.Lines[j];
-                    Rectangle PixelRect = new Rectangle(
-                        (int) (line.StartPos.X - Game1.CameraCentre.X), 
-                        (int) (line.StartPos.Y - Game1.CameraCentre.Y), 
-                        3, 
-                        3);
-                    //get size of screen to invert y axis
-                    PixelRect.Y = GraphicsHeight - PixelRect.Y;
-                    SpriteBatch.Draw(Pixel, PixelRect, null, Color.Red);
-                    //SpriteBatch.Draw(Pixel, new Vector2(100,100) - Game1.CameraCentre, Color.White);
+                    for (int j = 0; j < Triangles.Length; j += 3)
+                    {
+                       
+                        Vector2 A = shape.Vertices[Triangles[j]] - CameraPos;
+                        Vector2 B = shape.Vertices[Triangles[j + 1]] - CameraPos;
+                        Vector2 C = shape.Vertices[Triangles[j + 2]] - CameraPos;
+                        Vector2 CameraCentre = new Vector2(GraphicsWidth/2, GraphicsHeight/2);
+      
+                        Vector2 ZoomCentrePos = CameraCentre; // Pos to zoom on
+                        Vector2 TranslatedA = A - ZoomCentrePos;
+                        Vector2 TranslatedB = B - ZoomCentrePos;
+                        Vector2 TranslatedC = C - ZoomCentrePos;
+                        //This creates a vector from the zoom centre to the vertice
+                        TranslatedA *= Zoom;
+                        TranslatedB *= Zoom;
+                        TranslatedC *= Zoom;
+                        TranslatedA += ZoomCentrePos; // Add back the positions after the vectors have been scaled by the zoom
+                        TranslatedB += ZoomCentrePos;
+                        TranslatedC += ZoomCentrePos;
+                        Vector3 DimensionA = new Vector3(
+                         TranslatedA.X,
+                         TranslatedA.Y,
+                         0);
+                        Vector3 DimensionB = new Vector3(
+                            TranslatedB.X,
+                            TranslatedB.Y,
+                            0);
+                        Vector3 DimensionC = new Vector3(
+                           TranslatedC.X,
+                           TranslatedC.Y,
+                            0);
+                        // TextBox.StateByTextBox("Vector2 = 1", 
+                        var TriangleVertices = new VertexPositionColor[]
+                        {
+                             new VertexPositionColor(DimensionA, ShapeColour),
+                             new VertexPositionColor(DimensionB, ShapeColour),
+                             new VertexPositionColor(DimensionC, ShapeColour),
+                        };
+                        _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, TriangleVertices, 0, 1);
+                    }
+                   
                 }
+         
+                //Just draw the dots
+               
             }
-            for (int PixelX = 0; PixelX < GraphicsWidth; PixelX++)
+            //Fill in shape
+            foreach (VisualisedLine vl in VisualisedLinesToDraw)
             {
-                for (int PixelY = 0; PixelY < GraphicsHeight; PixelY++)
+                if (vl is VisualisedLine)
                 {
+                    Color LineColour = vl.DrawColour;
+                    byte alpha = (byte)(255 * (1f - vl.Transparency));
+                    LineColour = new Color(LineColour.R, LineColour.G, LineColour.B, alpha);
+                    Vector2 p0 = vl.StartPos - GameIns.CameraPos;
+                    Vector2 p1 = vl.EndPos - GameIns.CameraPos;
+                    Vector2 Direction = vl.EndPos - vl.StartPos;
+                    float len = Direction.Length();
+                    if (len <= 0.0001f)
+                    {
+                        continue;
+                    }
 
+                    Vector2 N_Direction = Direction / len;
+                    Vector2 perp = new Vector2(-N_Direction.Y, N_Direction.X); //Perpendicular line, specifically to the left.
+                    float halfThickness = vl.Width / 2 > 1 ? vl.Width / 2 : 1f;
+                 
+                    Vector2 p0a = p0 + perp * halfThickness - CameraPos; // The camerapos needs to be accounted for when zooming
+                    Vector2 p0b = p0 - perp * halfThickness - CameraPos;
+                    Vector2 p1a = p1 + perp * halfThickness - CameraPos;
+                    Vector2 p1b = p1 - perp * halfThickness - CameraPos;
+                    Vector2 CameraCentre = new Vector2(GraphicsWidth / 2, GraphicsHeight / 2);
+
+                    Vector2 ZoomCentrePos = CameraCentre; // Pos to zoom on
+                    Vector2 Translated_p0a = p0a - ZoomCentrePos;
+                    Vector2 Translated_p0b = p0b - ZoomCentrePos;
+                    Vector2 Translated_p1a = p1a - ZoomCentrePos;
+                    Vector2 Translated_p1b = p1b - ZoomCentrePos;
+                    //This creates a vector from the zoom centre to the vertice
+                    Translated_p0a *= Zoom;
+                    Translated_p0b *= Zoom;
+                    Translated_p1a *= Zoom;
+                    Translated_p1b *= Zoom;
+                    Translated_p0a += ZoomCentrePos;
+                    Translated_p0b += ZoomCentrePos;
+                    Translated_p1a += ZoomCentrePos;
+                    Translated_p1b += ZoomCentrePos;
+                    // Add back the positions after the vectors have been scaled by the zoom
+
+                    var vertices = new VertexPositionColor[3];
+                    vertices[0] = new VertexPositionColor(new Vector3(Translated_p0a, 0), LineColour);
+                    vertices[1] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+                    vertices[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+                    var vertices2 = new VertexPositionColor[3];
+                    vertices2[0] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+                    vertices2[1] = new VertexPositionColor(new Vector3(Translated_p1b, 0), LineColour);
+                    vertices2[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+
+                    //Submit 2 triangles to the GPU.
+                    _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+                    _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices2, 0, 1);
+                    //SpriteBatch.Draw(Pixel, new Rectangle((int)p0.X, (int)p0.Y, 50, 50), LineColour);
+                    //SpriteBatch.Draw(Pixel, new Rectangle((int)p1.X, (int)p1.Y, 50, 50), LineColour);
                 }
             }
+            SpriteBatch.Begin();
             //Draw TextBoxes
-            foreach (TextBox textBox in TextBox.ListOfTextBoxes)
+            foreach (UIElement element in UIElement.ListOfUIElements)
             {
-                SpriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], textBox.Text, textBox.ScreenPosition, Color.White);
+                if (UIList.ListOfUILists.Any(x => x.Contents.Any(a => (a.Name == element.Name))) == false) // If could not find name
+                {
+                    DrawUIElement(SpriteBatch, element, element.ScreenPosition);
+                }
+                
+            }
+            foreach (UIList list in UIList.ListOfUILists)
+            {
+                Vector2 Position = list.StartingPosition;
+                for (int i = 0; i < list.Contents.Count; i++)
+                {
+                    UIElement element = list.Contents[i];
+                    Vector2 PositionOffset = new(0, i * 10);
+                    DrawUIElement(SpriteBatch, element, Position + PositionOffset);
+                   // SpriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], textBox.Text, textBox.ScreenPosition + ScreenOffset, Color.White);
+                }
             }
             SpriteBatch.End();
         }
