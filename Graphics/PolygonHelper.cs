@@ -66,14 +66,14 @@ namespace Boid_Simulator.Graphics
                 {
                     bool IsEar = true;
                     int A = IndexList[i];
-                    int B = Util.GetItem(IndexList.ToArray(), i - 1);
-                    int C = Util.GetItem(IndexList.ToArray(), i + 1);
+                    int B = GeneralUtil.GetItem(IndexList.ToArray(), i - 1);
+                    int C = GeneralUtil.GetItem(IndexList.ToArray(), i + 1);
                     Vector2 VA = Vertices[A];
                     Vector2 VB = Vertices[B];
                     Vector2 VC = Vertices[C];
                     Vector2 AB = VB - VA;
                     Vector2 AC = VC - VA;
-                    if (Util.TwoDCrossProduct(AC, AB) < 0f) // Skip triangles that are not concave(angle more than 180, and 180 is already banned anyway)
+                    if (MathUtil.TwoDCrossProduct(AC, AB) < 0f) // Skip triangles that are not concave(angle more than 180, and 180 is already banned anyway)
                     {
                         continue;
                     }
@@ -115,9 +115,9 @@ namespace Boid_Simulator.Graphics
             Vector2 AP = P - A;
             Vector2 BP = P - B;
             Vector2 CP = P - C;
-            float CrossABAP = Util.TwoDCrossProduct(AB, AP);
-            float CrossBCBP = Util.TwoDCrossProduct(BC, BP);
-            float CrossCACP = Util.TwoDCrossProduct(CA, CP);
+            float CrossABAP = MathUtil.TwoDCrossProduct(AB, AP);
+            float CrossBCBP = MathUtil.TwoDCrossProduct(BC, BP);
+            float CrossCACP = MathUtil.TwoDCrossProduct(CA, CP);
             if (CrossABAP > 0f || CrossBCBP > 0f || CrossCACP > 0f)
             {
                 return false;
@@ -129,9 +129,9 @@ namespace Boid_Simulator.Graphics
             float Sum = 0f;
             for (int i = 0; i < Vertices.Length; i++)
             {
-                Vector2 v0 = Util.GetItem(Vertices, i);
-                Vector2 v1 = Util.GetItem(Vertices, i + 1);
-                Sum += Util.TwoDCrossProduct(v0, v1);
+                Vector2 v0 = GeneralUtil.GetItem(Vertices, i);
+                Vector2 v1 = GeneralUtil.GetItem(Vertices, i + 1);
+                Sum += MathUtil.TwoDCrossProduct(v0, v1);
             }
             return Sum < 0f;
         }
@@ -145,12 +145,12 @@ namespace Boid_Simulator.Graphics
             const float EPS = 0.001f;
             for (int i = 0; i < Vertices.Length; i++)
             {
-                Vector2 A = Util.GetItem(Vertices, i);
-                Vector2 B = Util.GetItem(Vertices, i - 1);
-                Vector2 C = Util.GetItem(Vertices, i + 1);
+                Vector2 A = GeneralUtil.GetItem(Vertices, i);
+                Vector2 B = GeneralUtil.GetItem(Vertices, i - 1);
+                Vector2 C = GeneralUtil.GetItem(Vertices, i + 1);
                 Vector2 AB = B - A;
                 Vector2 AC = C - A;
-                if (Math.Abs(Util.TwoDCrossProduct(AB, AC)) < EPS)
+                if (Math.Abs(MathUtil.TwoDCrossProduct(AB, AC)) < EPS)
                 {
                     return true;
                 }

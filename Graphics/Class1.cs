@@ -18,8 +18,7 @@ namespace Boid_Simulator.Graphics
         public static GraphicsDevice _graphicsDevice;
         //public static GraphicsDeviceManager _graphics;
         public static Texture2D Pixel;
-        public static Fonts GraphicalFonts;
-        private DynamicVertexBuffer _dynamicvVertexBuffer;
+        private DynamicVertexBuffer _dynamicVertexBuffer;
         static BasicEffect _basicEffect;
         //Visualisation Parameters
         public static float Zoom = 1;
@@ -28,7 +27,7 @@ namespace Boid_Simulator.Graphics
         {
             if (element is TextBox tb)
             {
-                _spriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], tb.Text, Position, Color.White);
+                _spriteBatch.DrawString(Fonts.GraphicalFonts.FontDictionary["Montserrat"], tb.Text, Position, Color.White);
             }
         }
         public static void Init(GraphicsDeviceManager _graphics, GraphicsDevice graphicsDevice)
@@ -36,7 +35,7 @@ namespace Boid_Simulator.Graphics
             _graphicsDevice = graphicsDevice;
             Pixel = new Texture2D(_graphicsDevice, 1, 1);
             Pixel.SetData(new[] { Color.White });
-            GraphicalFonts = new Fonts();
+            Fonts.GraphicalFonts = new Fonts();
             // Adjust the back buffer size
             _graphics.PreferredBackBufferWidth = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Width - 50;
             _graphics.PreferredBackBufferHeight = GraphicsAdapter.DefaultAdapter.CurrentDisplayMode.Height - 50;

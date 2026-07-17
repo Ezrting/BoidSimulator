@@ -18,8 +18,7 @@ namespace Boid_Simulator.GUI
         };
         public string Text;
         public float FontSize = 12;
-        public Color BoxColour = Color.Red;
-        public float BoxTransparency = 1;
+        public float MaxXLength = 100; //After exceeding this length, the text will start a new row down equal to FontSize downwards.
         public TextBox(Vector2 screenPosition, string text, string name) : base(screenPosition, name) //text is not part of base class
             //Take the first and second parameters of UIElement and assign them to the corresponding names.
         {

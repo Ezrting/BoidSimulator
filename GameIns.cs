@@ -13,6 +13,7 @@ namespace Boid_Simulator
 {
     public class GameIns : Game
     {
+        public bool Initialised = false;
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
         public static Vector2 CameraPos;
@@ -26,10 +27,11 @@ namespace Boid_Simulator
             IsMouseVisible = true;
             Instance = this;
             GameClient = new(this);
+           
             //change screen size to full screen
             //_graphics.IsFullScreen = true;
-           // _graphics.HardwareModeSwitch = false;
-           // _graphics.ApplyChanges();
+            // _graphics.HardwareModeSwitch = false;
+            // _graphics.ApplyChanges();
         }
 
         protected override void Initialize()
@@ -37,6 +39,7 @@ namespace Boid_Simulator
             // TODO: Add your initialization logic here
             Visualiser.Init(_graphics, GraphicsDevice);
             base.Initialize();
+            Initialised = true;
         }
 
         protected override void LoadContent()
@@ -63,18 +66,25 @@ namespace Boid_Simulator
                 {
                     Entity TrackedBoid = BoidsBeingTracked[i];
                     int BC = BoidsBeingViewedList.Contents.Count;
+                    UIElement element;
                     if (i >= 0 && i < BC)
                     {
-                        UIElement element = BoidsBeingViewedList.Contents[i];
-                        if (element is TextBox textBox)
-                        {
-                            float TheBoidOrientation = 180/ (float)Math.PI * Util.SimplifyDouble(Util.NormaliseAngle(TrackedBoid.Orientation), 3);
-                            float AngleToTarget = 180 / (float)Math.PI * Util.SimplifyDouble(Util.NormaliseAngle(TrackedBoid.Properties.AngleToTarget), 3);
-
-                            textBox.Text = TheBoidOrientation.ToString() + ",  " +
-                                 (AngleToTarget).ToString();
-                        }
+                        element = BoidsBeingViewedList.Contents[i];
                     }
+                    else
+                    {
+                        element = new TextBox(Vector2.Zero, "a", GeneralUtil.RandomID());
+                        BoidsBeingViewedList.Contents.Add(element);
+                    }
+                    if (element is TextBox textBox)
+                    {
+                        float TheBoidOrientation = MathUtil.SimplifyDouble(180 / (float)Math.PI * MathUtil.NormaliseAngle(TrackedBoid.Orientation), 3);
+                        float AngleToTarget = MathUtil.SimplifyDouble(180 / (float)Math.PI * MathUtil.NormaliseAngle(TrackedBoid.Properties.AngleToTarget), 3);
+
+                        textBox.Text = TheBoidOrientation.ToString() + ",  " +
+                             (AngleToTarget).ToString();
+                    }
+
                 }
             }
 

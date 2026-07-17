@@ -18,6 +18,9 @@ namespace Boid_Simulator.GUI
         public Vector2 ScreenPosition; //Screen position is overrided in lists
         public int LayerIndex;
         public string Name;
+        public Color BoxColour = Color.Red;
+        public float BoxTransparency = 1;
+        public Shape BoxShape;
         public UIElement(Vector2 screenPosition, string name)
         {
             this.ScreenPosition = screenPosition;

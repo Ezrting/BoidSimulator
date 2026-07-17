@@ -62,6 +62,30 @@ namespace Boid_Simulator.EntityHandler
         {
             return UniversalEntityList.Find(e => e.ID == Name); // e is placed before => so it is a parameter.
         }
+        public void AdjustBoidGeometry()
+        {
+
+            PositionList = new Vector2[] { new Vector2(-SideLength / 2, -SideLength / 2), new Vector2(SideLength / 2, -SideLength / 2), new Vector2(0, SideLength) };
+            float cos = (float)Math.Cos(Orientation);
+            float sin = (float)Math.Sin(Orientation);
+            Origin += new Vector2(0.0f, 0);
+            //Move in direction Boid is facing
+            for (int i = 0; i < PositionList.Length; i++)
+            {
+                Vector2 Pivot = PositionList[i] - new Vector2(0, 0); // Negate the point minus the point you are turning around. Although note in this case PositionList[i] is relative to the centre right now, which
+                                                                     //means the pivot is (0,0). This does make things easier but is important to keep in mind.
+                PositionList[i] = new Vector2(cos * Pivot.X - sin * Pivot.Y, sin * Pivot.X + cos * Pivot.Y);
+                //I used AI, but turns out this is the rotation matrix
+            }
+            for (int i = 0; i < PositionList.Length; i++)
+            {
+                PositionList[i] += Origin;
+            }
+            if (PrimaryShape != null)
+            {
+                PrimaryShape.CreateLines(PositionList);
+            }
+        }
         public void CreateViewLines(float AngleGap, float LineCount, float LineLength)
         {
             bool Visualise = false;
@@ -132,10 +156,16 @@ namespace Boid_Simulator.EntityHandler
             Velocity = new Vector2((float)(Amount * cos), (float)(Amount * sin));
             Origin += Velocity;
         }
+        public void MoveToPoint(Vector2 NewPosition, float? CustomOrientation = null)
+        {
+            float orientation = CustomOrientation ?? Orientation + OrientationOffset; // if no custom value is provided, CustomOrientation resets to the shape's current orientation
+            Orientation = orientation;
+            Origin = NewPosition;
+        }
         public void Update(GameTime gameTime)
         {
             double DeltaTime = gameTime.ElapsedGameTime.TotalSeconds;
-            Vector2 AimedVelocity;
+            Vector2 AimedVelocity = Vector2.Zero;
             float desiredSpeed;
             if (ControllingPlayer != null)
             {
@@ -152,14 +182,14 @@ namespace Boid_Simulator.EntityHandler
                 desiredSpeed = Math.Min(AimedVelocity.Length(), Speed);
                 //won't go beyond max speed
                 //Only compute when there is meaningful desired velocity
-                if (Util.SquaredDistance(AimedVelocity, Vector2.Zero) > 1e-6f)
+                if (MathUtil.SquaredDistance(AimedVelocity, Vector2.Zero) > 1e-6f)
                 {
                     //Account for orientation offset. This is what the orientation needs to reach, it needs not worry of the OrientationOffset as it is added during
                     
-                    Properties.AngleToTarget = Util.NormaliseAngle( Math.Atan2(AimedVelocity.Y, AimedVelocity.X) - OrientationOffset);
+                    Properties.AngleToTarget = MathUtil.NormaliseAngle( Math.Atan2(AimedVelocity.Y, AimedVelocity.X) - OrientationOffset);
                     
                     double AngleDifference = Properties.AngleToTarget - Orientation;
-                    AngleDifference = Util.NormaliseAngle(AngleDifference);
+                    AngleDifference = MathUtil.NormaliseAngle(AngleDifference);
                     //Max allowed rotation this frame, in radians, always positive.
                     double MaxRotation = DeltaTime * RotateSpeed * (float)Math.PI / 180; // Converted to radians
                     double Clamped = Math.Max(-MaxRotation, Math.Min(MaxRotation, AngleDifference));
@@ -169,38 +199,15 @@ namespace Boid_Simulator.EntityHandler
                 }
             }
 
-           
 
-           
 
-            PositionList = new Vector2[] { new Vector2(-SideLength / 2, -SideLength / 2), new Vector2(SideLength / 2, -SideLength / 2), new Vector2(0, SideLength) };
-            float cos = (float)Math.Cos(Orientation);
-            float sin = (float)Math.Sin(Orientation);
-            Origin += new Vector2(0.0f, 0);
-            //Move in direction Boid is facing
-            for (int i = 0; i < PositionList.Length; i++)
-            {
-                Vector2 Pivot = PositionList[i] - new Vector2(0, 0); // Negate the point minus the point you are turning around. Although note in this case PositionList[i] is relative to the centre right now, which
-                                                                     //means the pivot is (0,0). This does make things easier but is important to keep in mind.
-                PositionList[i] = new Vector2(cos * Pivot.X - sin * Pivot.Y, sin * Pivot.X + cos * Pivot.Y);
-                //I used AI, but turns out this is the rotation matrix
-            }
-            for (int i = 0; i < PositionList.Length; i++)
-            {
-                //Line1.StartPos = new Vector2((float)Math.Cos(Direction) * line.StartPos.X, (float)Math.Sin(Direction) * line.StartPos.Y);
-                // Line1.EndPos = new Vector2((float)Math.Cos(Direction) * line.EndPos.X, (float)Math.Sin(Direction) * line.EndPos.Y);
-                PositionList[i] += Origin;
-            }
-            if (PrimaryShape != null)
-            {
-                PrimaryShape.CreateLines(PositionList);
-            }
+
+            AdjustBoidGeometry();
             Move(desiredSpeed * DeltaTime);
-
            // CreateViewLines(8 * (float)Math.PI / 180f, 10, 10 * SideLength);
         }
     }
-    static class EntityFunctions
+    static class EntityFunctions //Entity functions that help handle entities
     {
         public static void Update(GameTime gameTime)
         {

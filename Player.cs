@@ -26,10 +26,15 @@ namespace Boid_Simulator
         {
             double DeltaTime = gameTime.TotalGameTime.TotalSeconds;
             KeyboardState keyboardState = Keyboard.GetState();
+            MouseState mouseState = Mouse.GetState();
             CurrentlyPressedKeys = keyboardState.GetPressedKeys();
 
             if (plr.ControlledCharacter == null)
             {
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                {
+                    
+                }
                 if (keyboardState.IsKeyDown(Keys.M))
                 {
                     Visualiser.Zoom *= 0.99f;

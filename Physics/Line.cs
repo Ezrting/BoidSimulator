@@ -41,9 +41,9 @@ namespace Boid_Simulator
             Vector2 s = line2.EndPos - line2.StartPos;//Startpos pointing to end;
             //2D CrossProduct
             Vector2 qMinusP = q - p;
-            float CrossR_S = Util.TwoDCrossProduct(r, s);
-            float CrossQmP_S = Util.TwoDCrossProduct(qMinusP, s);
-            float CrossQmP_R = Util.TwoDCrossProduct(qMinusP, r);
+            float CrossR_S = MathUtil.TwoDCrossProduct(r, s);
+            float CrossQmP_S = MathUtil.TwoDCrossProduct(qMinusP, s);
+            float CrossQmP_R = MathUtil.TwoDCrossProduct(qMinusP, r);
 
             if (Math.Abs(CrossR_S) < float.Epsilon)
             {
