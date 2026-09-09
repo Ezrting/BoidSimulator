@@ -1,0 +1,158 @@
+﻿## EXCEPTION
+Exception Type: System.InvalidOperationException
+Exception Message: Collection was modified; enumeration operation may not execute.
+The callstack context, if included, corresponds to the thread where this exception occurred. There is no need to identify this thread by other means.
+The top most frame in the callstack context should correspond to the place the exception message was thrown from. Code may or may not have been provided for it but can be requested.
+
+## CALLSTACK
+Thread ID: 11852
+[1] [External Code]
+[2] Boid Simulator.dll!Boid_Simulator.Graphics.Visualiser.Draw
+This is the current user focused stack frame. The provided locals context corresponds to this stack frame, but you may evaluate expressions and retrieve code for any frame.
+Code for the stack frame:
+```csharp Graphics\Class1.cs
+189:         public static void Draw(SpriteBatch SpriteBatch)
+190:         {
+191:             int GraphicsHeight = _graphicsDevice.Viewport.Height;
+192:             int GraphicsWidth = _graphicsDevice.Viewport.Width;
+193: 
+194:             Vector2 CameraPos = GameIns.CameraPos;
+195:             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+196:             {
+197:                 pass.Apply();
+198:             }
+199:             Shape[] ShapesToDraw = AcquireShapes(X=> X.IsPhysical == true);
+200:             VisualisedLine[] VisualisedLinesToDraw = AcquireVisualisedLines();
+201:             _basicEffect.CurrentTechnique.Passes[0].Apply();
+202:             _graphicsDevice.RasterizerState = RasterizerState.CullNone; // to prevent clockwise triangles from being invisible
+203:             _graphicsDevice.BlendState = BlendState.AlphaBlend;
+204:              DrawShapes(ShapesToDraw, true);
+205:             //Fill in shape
+206:             foreach (VisualisedLine vl in VisualisedLinesToDraw)
+207:             {
+208:                 if (vl is VisualisedLine)
+209:                 {
+210:                     Color LineColour = vl.DrawColour;
+211:                     byte alpha = (byte)(255 * (1f - vl.Transparency));
+212:                     LineColour = new Color(LineColour.R, LineColour.G, LineColour.B, alpha);
+213:                     Vector2 p0 = vl.StartPos - GameIns.CameraPos;
+214:                     Vector2 p1 = vl.EndPos - GameIns.CameraPos;
+215:                     Vector2 Direction = vl.EndPos - vl.StartPos;
+216:                     float len = Direction.Length();
+217:                     if (len <= 0.0001f)
+218:                     {
+219:                         continue;
+220:                     }
+221: 
+222:                     Vector2 N_Direction = Direction / len;
+223:                     Vector2 perp = new Vector2(-N_Direction.Y, N_Direction.X); //Perpendicular line, specifically to the left.
+224:                     float halfThickness = vl.Width / 2 > 1 ? vl.Width / 2 : 1f;
+225:                  
+226:                     Vector2 p0a = p0 + perp * halfThickness - CameraPos; // The camerapos needs to be accounted for when zooming
+227:                     Vector2 p0b = p0 - perp * halfThickness - CameraPos;
+228:                     Vector2 p1a = p1 + perp * halfThickness - CameraPos;
+229:                     Vector2 p1b = p1 - perp * halfThickness - CameraPos;
+230:                     Vector2 CameraCentre = new Vector2(GraphicsWidth / 2, GraphicsHeight / 2);
+231: 
+232:                     Vector2 ZoomCentrePos = CameraCentre; // Pos to zoom on
+233:                     Vector2 Translated_p0a = p0a - ZoomCentrePos;
+234:                     Vector2 Translated_p0b = p0b - ZoomCentrePos;
+235:                     Vector2 Translated_p1a = p1a - ZoomCentrePos;
+236:                     Vector2 Translated_p1b = p1b - ZoomCentrePos;
+237:                     //This creates a vector from the zoom centre to the vertice
+238:                     Translated_p0a *= Zoom;
+239:                     Translated_p0b *= Zoom;
+240:                     Translated_p1a *= Zoom;
+241:                     Translated_p1b *= Zoom;
+242:                     Translated_p0a += ZoomCentrePos;
+243:                     Translated_p0b += ZoomCentrePos;
+244:                     Translated_p1a += ZoomCentrePos;
+245:                     Translated_p1b += ZoomCentrePos;
+246:                     // Add back the positions after the vectors have been scaled by the zoom
+247: 
+248:                     var vertices = new VertexPositionColor[3];
+249:                     vertices[0] = new VertexPositionColor(new Vector3(Translated_p0a, 0), LineColour);
+250:                     vertices[1] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+251:                     vertices[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+252:                     var vertices2 = new VertexPositionColor[3];
+253:                     vertices2[0] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+254:                     vertices2[1] = new VertexPositionColor(new Vector3(Translated_p1b, 0), LineColour);
+255:                     vertices2[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+256: 
+257:                     //Submit 2 triangles to the GPU.
+258:                     _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+259:                     _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices2, 0, 1);
+260:                     //SpriteBatch.Draw(Pixel, new Rectangle((int)p0.X, (int)p0.Y, 50, 50), LineColour);
+261:                     //SpriteBatch.Draw(Pixel, new Rectangle((int)p1.X, (int)p1.Y, 50, 50), LineColour);
+262:                 }
+263:             }
+264:             SpriteBatch.Begin();
+265:             //Draw TextBoxes
+266:             foreach (UIElement element in UIElement.ListOfUIElements)
+267:             {
+268:                 if (UIList.ListOfUILists.Any(x => x.Contents.Any(a => (a.Name == element.Name))) == false) // If could not find name
+269:                 {
+270:                     DrawUIElement(SpriteBatch, element, element.ScreenPosition);
+271:                 }
+272:                 
+273:             }
+274:             foreach (UIList list in UIList.ListOfUILists)
+275:             {
+276:                 Vector2 Position = list.StartingPosition;
+277:                 for (int i = 0; i < list.Contents.Count; i++)
+278:                 {
+279:                     UIElement element = list.Contents[i];
+280:                     Vector2 PositionOffset = new(0, i * 10);
+281:                     DrawUIElement(SpriteBatch, element, Position + PositionOffset);
+282:                    // SpriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], textBox.Text, textBox.ScreenPosition + ScreenOffset, Color.White);
+283:                 }
+284:             }
+285:             SpriteBatch.End();
+286:         }
+```
+Current statement: line 266 (`in`)
+[3] Boid Simulator.dll!Boid_Simulator.GameIns.Draw
+Code for the stack frame:
+```csharp GameIns.cs
+117:         protected override void Draw(GameTime gameTime)
+118:         {
+119:             GraphicsDevice.Clear(Color.Black);
+120: 
+121:             // TODO: Add your drawing code here
+122:             Visualiser.Draw(_spriteBatch);
+123:             base.Draw(gameTime);
+124:             
+125:         }
+```
+Current statement: line 122
+[4] [External Code]
+[5] Boid Simulator.dll!Program.<Main>$
+Code for the stack frame:
+```csharp Program.cs
+76:         Entity NewEntity2 = new Entity("RegularBoid", new Vector2(RandomPosX, RandomPosY), 20, new Shape[] { new() { DrawColour = RandomColour } }) { Orientation = StartingOrientation, RotateSpeed = rotateSpeed, Speed = speed, SideLength = sideLength };
+77:         NewEntity2.PrimaryShape.Transparency = 0.2f;
+78:         if (i == 32)
+79:         {
+80:             NewEntity2.SideLength *= 1;
+81:             GameIns.BoidsBeingTracked.Add(NewEntity2);
+82:         }
+83:         Thread.Sleep(10);
+84:     }
+85: 
+86: }
+87: );
+88: GameThread.Start();
+89: 
+90: 
+91: game.Run();
+```
+Current statement: line 91
+
+## LOCALS
+Variable: 'SpriteBatch' of type 'Microsoft.Xna.Framework.Graphics.SpriteBatch' is a complex object with child properties and has value: {Microsoft.Xna.Framework.Graphics.SpriteBatch}
+Variable: 'GraphicsHeight' of type 'int' has value: 1030
+Variable: 'GraphicsWidth' of type 'int' has value: 1870
+Variable: 'CameraPos' of type 'Microsoft.Xna.Framework.Vector2' is a complex object with child properties and has value: 0  0
+Variable: 'ShapesToDraw' of type 'Boid_Simulator.Shape[]' has value: {Boid_Simulator.Shape[0]}
+Variable: 'VisualisedLinesToDraw' of type 'Boid_Simulator.VisualisedLine[]' has value: {Boid_Simulator.VisualisedLine[0]}
+

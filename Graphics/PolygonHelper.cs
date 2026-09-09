@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Boid_Simulator.Utility;
 using System.Globalization;
+using System.ComponentModel;
+using System.Diagnostics;
 
 public enum WindingOrder
 {
@@ -44,7 +46,7 @@ namespace Boid_Simulator.Graphics
             if (ContainsColinearEdges(Vertices))
             {
                 ErrorMessage = "Triangle contains colinear edges";
-                return false;
+               // return false;
             }
             if (!IsClockwise(Vertices))
             {

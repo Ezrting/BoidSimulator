@@ -33,3 +33,6 @@ C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\Boid Simulator.genru
 C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\ref\Boid Simulator.dll
 C:\Users\ezrat\source\repos\Boid Simulator\obj\Debug\net8.0\Boid Simulator.sourcelink.json
 C:\Users\ezrat\source\repos\Boid Simulator\bin\Debug\net8.0\Content\Fonts\Montserrat.xnb
+c:\Users\ezrat\source\repos\Boid Simulator\bin\Debug\net8.0\runtimes\win-arm64\native\openal.dll
+c:\Users\ezrat\source\repos\Boid Simulator\bin\Debug\net8.0\runtimes\linux-arm64\native\libSDL2-2.0.so.0
+c:\Users\ezrat\source\repos\Boid Simulator\bin\Debug\net8.0\runtimes\win-arm64\native\SDL2.dll

@@ -18,13 +18,15 @@ namespace Boid_Simulator.GUI
         };
         public string Text;
         public float FontSize = 12;
-        public float MaxXLength = 100; //After exceeding this length, the text will start a new row down equal to FontSize downwards.
-        public TextBox(Vector2 screenPosition, string text, string name) : base(screenPosition, name) //text is not part of base class
+        static Vector2 DefaultMaxBoxDimensions = new Vector2(3000,300);
+     
+        public TextBox(Vector2 screenPosition, Vector2? maxboxdimensions, string text, string name) : base(screenPosition, name) //text and boxdimensions are not part of base class
             //Take the first and second parameters of UIElement and assign them to the corresponding names.
         {
             this.ScreenPosition = screenPosition;
             this.Text = text;
             this.Name = name;
+            this.MaxBoxDimensions = maxboxdimensions ?? DefaultMaxBoxDimensions;
             ListOfTextBoxes.Add(this);
             if (!ListOfTextBoxGroups.TryGetValue(screenPosition, out var Value)) //The box position is only the starting position of the list of textboxes.
             {
@@ -49,7 +51,7 @@ namespace Boid_Simulator.GUI
             else
             {
 
-                TextBox New = new TextBox(BoxPosition, BoxText, BoxName);
+                TextBox New = new TextBox(BoxPosition, DefaultMaxBoxDimensions, BoxText, BoxName);
                 return New;
             }
         }

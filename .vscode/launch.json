@@ -1,14 +1,15 @@
 {
-    // Use IntelliSense to learn about possible attributes.
-    // Hover to view descriptions of existing attributes.
-    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
-    "version": "0.2.0",
-    "configurations": [
-      {
-        "name": "C#: Boid_Simulator Debug",
-        "type": "dotnet",
-        "request": "launch",
-        "projectPath": "${workspaceFolder}/Boid_Simulator.csproj"
-      }
-    ],
-  }
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Run MonoGame",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "buildGame",
+      "program": "${workspaceFolder}/bin/Debug/net8.0/Boid Simulator.dll",
+      "cwd": "${workspaceFolder}",
+      "console": "internalConsole",
+      "stopAtEntry": false
+    }
+  ]
+}

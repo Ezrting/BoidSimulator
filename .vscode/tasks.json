@@ -1,0 +1,15 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "buildGame",
+      "type": "process",
+      "command": "dotnet",
+      "args": [
+        "build",
+        "${workspaceFolder}/Boid Simulator.csproj"
+      ],
+      "problemMatcher": "$msCompile"
+    }
+  ]
+}

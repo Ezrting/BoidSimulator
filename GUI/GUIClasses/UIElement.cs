@@ -1,5 +1,6 @@
-﻿using System;
+﻿using Boid_Simulator.Utility;
 using Microsoft.Xna.Framework;
+using System;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -20,12 +21,14 @@ namespace Boid_Simulator.GUI
         public string Name;
         public Color BoxColour = Color.Red;
         public float BoxTransparency = 1;
-        public Shape BoxShape;
+        public Vector2 MaxBoxDimensions;
+        public Shape BoxShape; //Based on BoxDimensions
+
         public UIElement(Vector2 screenPosition, string name)
         {
             this.ScreenPosition = screenPosition;
             this.Name = name;
-            ListOfUIElements.Add(this);
+            GeneralUtil.DeferredCollectionManager<UIElement>.BookAdd(ListOfUIElements, this);
         }
     }
 }

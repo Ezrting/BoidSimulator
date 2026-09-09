@@ -10,6 +10,8 @@ using Microsoft.Xna.Framework.Input;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.Marshalling;
 using Boid_Simulator.Utility;
+using System.Linq;
+using System.Runtime.CompilerServices;
 
 namespace Boid_Simulator.EntityHandler
 {
@@ -40,20 +42,22 @@ namespace Boid_Simulator.EntityHandler
         public Vector2 Velocity = Vector2.Zero;
         public float RotateSpeed = 0.5f;
         public float Speed;
-        Vector2[] PositionList;
+       
         public Shape PrimaryShape;
-        List<VisualisedLine> ViewLinesToDestroy = new();
-        public Entity(string id, Vector2 origin, float sideLength, Shape _shape = null)
+        public Shape[] ShapeComp;
+        List <VisualisedLine> ViewLinesToDestroy = new();
+        public Entity(string id, Vector2 origin, float sideLength, Shape[] shapeComp, Shape _shape = null)
         {
-
+            if (shapeComp.Length == 0) { throw new Exception("At least one shape is needed in the composition"); }
             SideLength = sideLength;
             Origin = origin;
-            this.PrimaryShape = _shape ?? new();
+            this.PrimaryShape = _shape ?? shapeComp[0];
             this.PrimaryShape.Owner = this;
+            this.ShapeComp = shapeComp;
             this.ID = id;
             Properties = new();
-            UniversalEntityList.Add(this);
-            BoidHandler.ListOfBoids.Add(this);
+            GeneralUtil.DeferredCollectionManager<Entity>.BookAdd(Entity.UniversalEntityList, this);
+            GeneralUtil.DeferredCollectionManager<Entity>.BookAdd(BoidHandler.ListOfBoids, this);
         }
         float PreviousAngleGap = 0;
         float PreviousLineCount = 0;
@@ -64,8 +68,13 @@ namespace Boid_Simulator.EntityHandler
         }
         public void AdjustBoidGeometry()
         {
-
-            PositionList = new Vector2[] { new Vector2(-SideLength / 2, -SideLength / 2), new Vector2(SideLength / 2, -SideLength / 2), new Vector2(0, SideLength) };
+            Shape ShapeToCreate = PrimaryShape;
+            Vector2[] PositionList = ShapeLayoutData.LayoutDictionary["Basic Boid"].Composition;
+            Random random = new Random();
+            for (int i = 0; i < PositionList.Length; i++)
+            {
+                PositionList[i] = new Vector2((float)ShapeToCreate.FormData[i].X * SideLength, (float)ShapeToCreate.FormData[i].Y * SideLength);
+            }
             float cos = (float)Math.Cos(Orientation);
             float sin = (float)Math.Sin(Orientation);
             Origin += new Vector2(0.0f, 0);
@@ -81,9 +90,10 @@ namespace Boid_Simulator.EntityHandler
             {
                 PositionList[i] += Origin;
             }
-            if (PrimaryShape != null)
+            if (ShapeToCreate != null)
             {
-                PrimaryShape.CreateLines(PositionList);
+                ShapeToCreate.IsPhysical = true;
+                ShapeToCreate.CreateLines(PositionList);
             }
         }
         public void CreateViewLines(float AngleGap, float LineCount, float LineLength)
@@ -209,13 +219,22 @@ namespace Boid_Simulator.EntityHandler
     }
     static class EntityFunctions //Entity functions that help handle entities
     {
+        //public static EntitiesToAdd
+        static Stopwatch SW = new Stopwatch();
+        public static List<Entity> EntitiesToAdd = new();
+        public static List<Entity> EntitiesToRemove = new();
         public static void Update(GameTime gameTime)
         {
-           // Debug.WriteLine(Entity.TotalRadiansRotation / Entity.TotalRotationCount);
-            foreach (Entity entity in Entity.UniversalEntityList)
+            // Debug.WriteLine(Entity.TotalRadiansRotation / Entity.TotalRotationCount);
+            SW.Reset();
+            SW.Start();
+            Entity[] Snapshot = [.. Entity.UniversalEntityList];
+            foreach (Entity entity in Snapshot)  //.ToList creates a snapshot copy that is different from Entity.UniversalEntityList, so that it can run whilst the latter is modified
             {
                 entity.Update(gameTime);
             }
+            SW.Stop();
+            GeneralUtil.DeferredCollectionManager<Entity>.ApplyDeferred();
         }
     }
 

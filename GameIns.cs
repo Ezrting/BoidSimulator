@@ -53,10 +53,30 @@ namespace Boid_Simulator
         {
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
+            Vector2 MousePos = Mouse.GetState().Position.ToVector2();
+            int GraphicsHeight = GraphicsDevice.Viewport.Height;
+            int GraphicsWidth = GraphicsDevice.Viewport.Width;
+            Vector2 CameraCentre = new Vector2(GraphicsWidth / 2, GraphicsHeight / 2);
             TextBox MousePosTextBox = TextBox.ListOfTextBoxes.Find(x => x.Name == "MousePos");
             if (MousePosTextBox != null)
             {
-                MousePosTextBox.Text = "Mouse Pos: " + (Mouse.GetState().Position.ToVector2()).ToString(); // World Pos
+                MousePos.X = MathUtil.SimplifyDouble(MousePos.X, 0);
+                MousePos.Y = MathUtil.SimplifyDouble(MousePos.Y, 0);
+                MousePosTextBox.Text = "Mouse Pos: " + (MousePos).ToString(); // World Pos
+            }
+            TextBox WorldMousePosTextBox = TextBox.ListOfTextBoxes.Find(x => x.Name == "WorldMousePos");
+            if (WorldMousePosTextBox != null)
+            {
+                //(This is excluding the camera pos movement)
+                // V = (A-CP)*Zoom + CP
+                // V = A*Zoom - CP*(Zoom - 1)
+                //A = (CP*(Zoom - 1) +V) / Zoom
+
+                //V = relative pos(in here, its mouse relative pos), cp = centre pos, a = mouse world pos, zoom = zoom factor
+                Vector2 WorldMousePos = (CameraCentre * (Visualiser.Zoom - 1) + MousePos) / Visualiser.Zoom + CameraPos;
+                WorldMousePos.X = MathUtil.SimplifyDouble(WorldMousePos.X, 0);
+                WorldMousePos.Y = MathUtil.SimplifyDouble(WorldMousePos.Y, 0);
+                WorldMousePosTextBox.Text = "World Mouse Pos: " + (WorldMousePos).ToString(); // World Pos
             }
             //Detail orientation of tracked boids.
             UIList BoidsBeingViewedList = UIList.ListOfUILists.Find(x => x.Name == "BoidsBeingViewedList");
@@ -73,7 +93,8 @@ namespace Boid_Simulator
                     }
                     else
                     {
-                        element = new TextBox(Vector2.Zero, "a", GeneralUtil.RandomID());
+                       
+                        element = new TextBox(Vector2.Zero, null, "a", GeneralUtil.RandomID());
                         BoidsBeingViewedList.Contents.Add(element);
                     }
                     if (element is TextBox textBox)
@@ -90,6 +111,7 @@ namespace Boid_Simulator
 
             // TODO: Add your update logic here
             EntityFunctions.Update(gameTime);
+            GeneralUtil.DeferredCollectionManager<UIElement>.ApplyDeferred();
             Player.Update(gameTime, GameClient);
             base.Update(gameTime);
         }

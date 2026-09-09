@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 
 namespace Boid_Simulator.GUI
 {
-    internal class Fonts
+    internal static class Fonts
     {
-        public Dictionary<string, SpriteFont> FontDictionary = new();
-        public static Fonts GraphicalFonts;
-        public Fonts()
+        public static Dictionary<string, SpriteFont> FontDictionary = new()
         {
-            FontDictionary["Montserrat"] = GameIns.Instance.Content.Load<SpriteFont>("Fonts/Montserrat");
-        }
+            ["Montserrat"] = GameIns.Instance.Content.Load<SpriteFont>("Fonts/Montserrat")
+        };
     }
 }

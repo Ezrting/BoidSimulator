@@ -19,8 +19,10 @@ namespace Boid_Simulator
         public float? Radius;
         public Color DrawColour = Color.FloralWhite;
         public float Transparency = 0f;
+        public bool IsPhysical { get; set; }
         public Entity? Owner;
-        
+        public Vector2[] FormData = new Vector2[] { new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(0, 1f) };
+
         public Shape(Line[] lines)
         {
             this.Lines = lines;
@@ -63,11 +65,31 @@ namespace Boid_Simulator
             {
                 PositionsString += Positions[i];
             }
-           // TextBox.StateByTextBox(PositionsString, new Vector2(10,30), "Blah");
+            // TextBox.StateByTextBox(PositionsString, new Vector2(10,30), "Blah");
         }
         public static bool CheckIfPointInShape(Vector2 Point, Shape ShapeToCheck)
         {
             return false;
         }
+    }
+    public class ShapeLayout() //Holds a list of 1 to-be-shape.
+    {
+        public Vector2[] Composition = new Vector2[] { new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(0, 1f) };
+        public Color ShapeColour = Color.Blue;
+        //한국어를 말하지 않아요...
+    }
+
+    public static class ShapeLayoutData //This is a dictionary that holds a list of ShapeLayout().
+    {
+        public static Dictionary<string, ShapeLayout> LayoutDictionary = new()
+        {
+            ["Basic Boid"] = new()
+            {
+                Composition = new Vector2[] { new Vector2(-0.5f, -0.5f), new Vector2(0.5f, -0.5f), new Vector2(0, 1f) }
+            }
+        };
+
+
+         
     }
 }

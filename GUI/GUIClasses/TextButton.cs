@@ -10,7 +10,7 @@ namespace Boid_Simulator.GUI
     internal class TextButton : TextBox
     {
         bool IsBeingHeld = false;
-        public TextButton(Vector2 screenPosition, string text, string name) : base(screenPosition, text, name)
+        public TextButton(Vector2 screenPosition, Vector2 boxdimensions, string text, string name) : base(screenPosition, boxdimensions, text, name)
         {
         }
     }

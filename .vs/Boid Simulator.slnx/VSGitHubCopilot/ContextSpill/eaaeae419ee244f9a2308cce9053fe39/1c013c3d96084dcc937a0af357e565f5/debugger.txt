@@ -1,0 +1,274 @@
+﻿## EXCEPTION
+Exception Type: System.ArgumentException
+Exception Message: Text contains characters that cannot be resolved by this SpriteFont. (Parameter 'text')
+The callstack context, if included, corresponds to the thread where this exception occurred. There is no need to identify this thread by other means.
+The top most frame in the callstack context should correspond to the place the exception message was thrown from. Code may or may not have been provided for it but can be requested.
+
+## CALLSTACK
+Thread ID: 11696
+[1] [External Code]
+[2] Boid Simulator.dll!Boid_Simulator.Utility.GeneralUtil.SplitTextIntoRows
+This is the current user focused stack frame. The provided locals context corresponds to this stack frame, but you may evaluate expressions and retrieve code for any frame.
+Code for the stack frame:
+```csharp Utility\Util.cs
+118:         public static (List<string> Contents, float[] LineLengths) SplitTextIntoRows(SpriteFont font, string text, float FontSize, float BoxWidth)
+119:         {
+120:             //Each new item represents a row of text
+121:             List<string> SplitRows = new();
+122:             float CurrentDrawPositionX = 0;
+123:             string CurrentWordBeingFormed = string.Empty;
+124:             string CurrentLineBeingFormed = string.Empty;
+125:             string[] SplitText = text.Split(' ');
+126:             foreach (string s in SplitText)
+127:             {
+128:                 Vector2 WordTextDimensions = font.MeasureString(s.ToString()) * FontSize;
+129:                 //If the word overlaps
+130:                 if (s == string.Empty)
+131:                 {
+132:                     WordTextDimensions = font.MeasureString(" ".ToString()) * FontSize;
+133:                     //This above is done because s will have a space character added to it, which has positional value.
+134:                     //string.Empty characters are created here because multiple spaces could be in a row.
+135:                 }
+136:                 if (CurrentDrawPositionX + WordTextDimensions.X > BoxWidth)
+137:                 {
+138:                     if (WordTextDimensions.X > BoxWidth) //If the word on its own is more than the box width
+139:                     {
+140:                         foreach (char Character in s)
+141:                         {
+142:                             Vector2 CharTextDimensions = font.MeasureString(Character.ToString()) * FontSize;
+143:                             
+144: 
+145:                             if (CharTextDimensions.X > BoxWidth && CurrentDrawPositionX == 0) //if the SINGULAR character is longer than the box width, just give up and let it in
+146:                             {
+147:                                 SplitRows.Add(CurrentLineBeingFormed);
+148:                                 CurrentLineBeingFormed = string.Empty;
+149:                                 CurrentDrawPositionX = 0;
+150:                             }
+151:                             else if (CurrentDrawPositionX + CharTextDimensions.X > BoxWidth) //Reset if a character of the really long word overlaps.
+152:                             {
+153:                                 SplitRows.Add(CurrentLineBeingFormed);
+154:                                 CurrentLineBeingFormed = string.Empty;
+155:                                 CurrentDrawPositionX = 0;
+156:                             }
+157:                             CurrentLineBeingFormed += Character;
+158:                             CurrentDrawPositionX += CharTextDimensions.X;
+159:                         }
+160:                     }
+161:                     else
+162:                     {
+163:                         //Add a new line and start over.
+164:                         SplitRows.Add(CurrentLineBeingFormed);
+165:                         CurrentLineBeingFormed = string.Empty;
+166:                         CurrentDrawPositionX = 0;
+167:                     }
+168: 
+169:                 }
+170:                 if (WordTextDimensions.X <= BoxWidth) //In the case where WordTextDimensions.X > BoxWidth, that exception has already been handled above
+171:                 {
+172:                     //Add the word to the new line
+173:                     CurrentLineBeingFormed += s + " ";
+174:                     CurrentDrawPositionX += WordTextDimensions.X;
+175:                 }
+176:                     
+177:             }
+178:            
+179:             SplitRows.Add(CurrentLineBeingFormed);
+180:             float[] LineLengths = new float[SplitRows.Count]; //This LineLengths does not refer to the named return type, nor does the program know it exists.
+181:             //Naming return types is only useful to access the result by keys.
+182:             for (int i = 0; i < SplitRows.Count; i++)
+183:             {
+184:                 Vector2 LineDimensions = font.MeasureString(SplitRows[i]) * FontSize;
+185:                 LineLengths[i] = LineDimensions.X;
+186:             }
+187:             return (SplitRows, LineLengths);
+188:         }
+```
+Current statement: line 128
+[3] Boid Simulator.dll!Boid_Simulator.Graphics.Visualiser.DrawUIElement
+Code for the stack frame:
+```csharp Graphics\Class1.cs
+28:         public static void DrawUIElement(SpriteBatch _spriteBatch, UIElement element, Vector2 Position)
+29:         {
+30:             if (element is TextBox tb)
+31:             {
+32:                 SpriteFont TextFont = Fonts.GraphicalFonts.FontDictionary["Montserrat"];
+33:                 var Result = GeneralUtil.SplitTextIntoRows(TextFont, tb.Text, 1, tb.MaxBoxDimensions.X);
+34:                 List<string> TextLines = Result.Contents;
+35:                 float MaxHeight = tb.FontSize * TextLines.Count;
+36:                 //Adjust Transparency
+37:                 if (tb.BoxTransparency < 1)
+38:                 {
+39:                     Vector2[] PositionList = { new Vector2(0, 0), new Vector2(tb.MaxBoxDimensions.X, 0), new Vector2(tb.MaxBoxDimensions.X, MaxHeight), new Vector2(0, MaxHeight) };
+40:                     for(int i = 0; i < PositionList.Length; i++){ PositionList[i] += Position; }
+41:                     tb.BoxShape = new(PositionList);
+42:                 }
+43:                 if (tb.BoxShape != null)
+44:                 {
+45:                     tb.BoxShape.DrawColour = tb.BoxColour;
+46:                     tb.BoxShape.IsPhysical = false;
+47:                     tb.BoxShape.Transparency = tb.BoxTransparency;
+48:                 }
+49:                 for (int i = 0; i < TextLines.Count; i++)
+50:                 {
+51:                     string textline = TextLines[i];
+52:                     if(tb.BoxShape != null) DrawShapes(new[] { tb.BoxShape }, false);
+53:                     _spriteBatch.DrawString(TextFont, textline, Position + new Vector2(0, i * tb.FontSize), Color.White);
+54:                 }
+55:             }
+56:         }
+```
+Current statement: line 33
+[4] Boid Simulator.dll!Boid_Simulator.Graphics.Visualiser.Draw
+Code for the stack frame:
+```csharp Graphics\Class1.cs
+169:         public static void Draw(SpriteBatch SpriteBatch)
+170:         {
+171:             int GraphicsHeight = _graphicsDevice.Viewport.Height;
+172:             int GraphicsWidth = _graphicsDevice.Viewport.Width;
+173: 
+174:             Vector2 CameraPos = GameIns.CameraPos;
+175:             foreach (var pass in _basicEffect.CurrentTechnique.Passes)
+176:             {
+177:                 pass.Apply();
+178:             }
+179:             Shape[] ShapesToDraw = AcquireShapes(X=> X.IsPhysical == true);
+180:             VisualisedLine[] VisualisedLinesToDraw = AcquireVisualisedLines();
+181:             _basicEffect.CurrentTechnique.Passes[0].Apply();
+182:             _graphicsDevice.RasterizerState = RasterizerState.CullNone; // to prevent clockwise triangles from being invisible
+183:             _graphicsDevice.BlendState = BlendState.AlphaBlend;
+184:              DrawShapes(ShapesToDraw, true);
+185:             //Fill in shape
+186:             foreach (VisualisedLine vl in VisualisedLinesToDraw)
+187:             {
+188:                 if (vl is VisualisedLine)
+189:                 {
+190:                     Color LineColour = vl.DrawColour;
+191:                     byte alpha = (byte)(255 * (1f - vl.Transparency));
+192:                     LineColour = new Color(LineColour.R, LineColour.G, LineColour.B, alpha);
+193:                     Vector2 p0 = vl.StartPos - GameIns.CameraPos;
+194:                     Vector2 p1 = vl.EndPos - GameIns.CameraPos;
+195:                     Vector2 Direction = vl.EndPos - vl.StartPos;
+196:                     float len = Direction.Length();
+197:                     if (len <= 0.0001f)
+198:                     {
+199:                         continue;
+200:                     }
+201: 
+202:                     Vector2 N_Direction = Direction / len;
+203:                     Vector2 perp = new Vector2(-N_Direction.Y, N_Direction.X); //Perpendicular line, specifically to the left.
+204:                     float halfThickness = vl.Width / 2 > 1 ? vl.Width / 2 : 1f;
+205:                  
+206:                     Vector2 p0a = p0 + perp * halfThickness - CameraPos; // The camerapos needs to be accounted for when zooming
+207:                     Vector2 p0b = p0 - perp * halfThickness - CameraPos;
+208:                     Vector2 p1a = p1 + perp * halfThickness - CameraPos;
+209:                     Vector2 p1b = p1 - perp * halfThickness - CameraPos;
+210:                     Vector2 CameraCentre = new Vector2(GraphicsWidth / 2, GraphicsHeight / 2);
+211: 
+212:                     Vector2 ZoomCentrePos = CameraCentre; // Pos to zoom on
+213:                     Vector2 Translated_p0a = p0a - ZoomCentrePos;
+214:                     Vector2 Translated_p0b = p0b - ZoomCentrePos;
+215:                     Vector2 Translated_p1a = p1a - ZoomCentrePos;
+216:                     Vector2 Translated_p1b = p1b - ZoomCentrePos;
+217:                     //This creates a vector from the zoom centre to the vertice
+218:                     Translated_p0a *= Zoom;
+219:                     Translated_p0b *= Zoom;
+220:                     Translated_p1a *= Zoom;
+221:                     Translated_p1b *= Zoom;
+222:                     Translated_p0a += ZoomCentrePos;
+223:                     Translated_p0b += ZoomCentrePos;
+224:                     Translated_p1a += ZoomCentrePos;
+225:                     Translated_p1b += ZoomCentrePos;
+226:                     // Add back the positions after the vectors have been scaled by the zoom
+227: 
+228:                     var vertices = new VertexPositionColor[3];
+229:                     vertices[0] = new VertexPositionColor(new Vector3(Translated_p0a, 0), LineColour);
+230:                     vertices[1] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+231:                     vertices[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+232:                     var vertices2 = new VertexPositionColor[3];
+233:                     vertices2[0] = new VertexPositionColor(new Vector3(Translated_p0b, 0), LineColour);
+234:                     vertices2[1] = new VertexPositionColor(new Vector3(Translated_p1b, 0), LineColour);
+235:                     vertices2[2] = new VertexPositionColor(new Vector3(Translated_p1a, 0), LineColour);
+236: 
+237:                     //Submit 2 triangles to the GPU.
+238:                     _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices, 0, 1);
+239:                     _graphicsDevice.DrawUserPrimitives(PrimitiveType.TriangleList, vertices2, 0, 1);
+240:                     //SpriteBatch.Draw(Pixel, new Rectangle((int)p0.X, (int)p0.Y, 50, 50), LineColour);
+241:                     //SpriteBatch.Draw(Pixel, new Rectangle((int)p1.X, (int)p1.Y, 50, 50), LineColour);
+242:                 }
+243:             }
+244:             SpriteBatch.Begin();
+245:             //Draw TextBoxes
+246:             foreach (UIElement element in UIElement.ListOfUIElements)
+247:             {
+248:                 if (UIList.ListOfUILists.Any(x => x.Contents.Any(a => (a.Name == element.Name))) == false) // If could not find name
+249:                 {
+250:                     DrawUIElement(SpriteBatch, element, element.ScreenPosition);
+251:                 }
+252:                 
+253:             }
+254:             foreach (UIList list in UIList.ListOfUILists)
+255:             {
+256:                 Vector2 Position = list.StartingPosition;
+257:                 for (int i = 0; i < list.Contents.Count; i++)
+258:                 {
+259:                     UIElement element = list.Contents[i];
+260:                     Vector2 PositionOffset = new(0, i * 10);
+261:                     DrawUIElement(SpriteBatch, element, Position + PositionOffset);
+262:                    // SpriteBatch.DrawString(GraphicalFonts.FontDictionary["Montserrat"], textBox.Text, textBox.ScreenPosition + ScreenOffset, Color.White);
+263:                 }
+264:             }
+265:             SpriteBatch.End();
+266:         }
+```
+Current statement: line 250
+[5] Boid Simulator.dll!Boid_Simulator.GameIns.Draw
+Code for the stack frame:
+```csharp GameIns.cs
+112:         protected override void Draw(GameTime gameTime)
+113:         {
+114:             GraphicsDevice.Clear(Color.Black);
+115: 
+116:             // TODO: Add your drawing code here
+117:             Visualiser.Draw(_spriteBatch);
+118:             base.Draw(gameTime);
+119:             
+120:         }
+```
+Current statement: line 117
+[6] [External Code]
+[7] Boid Simulator.dll!Program.<Main>$
+Code for the stack frame:
+```csharp Program.cs
+75:         Entity NewEntity2 = new Entity("RegularBoid", new Vector2(RandomPosX, RandomPosY), 20, new Shape[] { new() { DrawColour = RandomColour } }) { Orientation = StartingOrientation, RotateSpeed = rotateSpeed, Speed = speed, SideLength = sideLength };
+76:         NewEntity2.PrimaryShape.Transparency = 0.2f;
+77:         if (i == 32)
+78:         {
+79:             NewEntity2.SideLength *= 1;
+80:             GameIns.BoidsBeingTracked.Add(NewEntity2);
+81:         }
+82:         Thread.Sleep(10);
+83:     }
+84: 
+85: }
+86: );
+87: GameThread.Start();
+88: 
+89: 
+90: game.Run();
+```
+Current statement: line 90
+
+## LOCALS
+Variable: 'font' of type 'Microsoft.Xna.Framework.Graphics.SpriteFont' is a complex object with child properties and has value: {Microsoft.Xna.Framework.Graphics.SpriteFont}
+Variable: 'text' of type 'string' has value: "World Mouse Pos: {X:-∞ Y:-13.249257}"
+Variable: 'FontSize' of type 'float' has value: 1
+Variable: 'BoxWidth' of type 'float' has value: 3000
+Variable: 'SplitRows' of type 'System.Collections.Generic.List<string>' is a complex object with child properties and has value: Count = 0
+Variable: 'CurrentDrawPositionX' of type 'float' has value: 98
+Variable: 'CurrentWordBeingFormed' of type 'string' has value: ""
+Variable: 'CurrentLineBeingFormed' of type 'string' has value: "World Mouse Pos: "
+Variable: 'SplitText' of type 'string[]' is a complex object with child properties and has value: {string[5]}
+Variable: 'LineLengths' of type 'float[]' has value: null
+Variable: 's' of type 'string' has value: "{X:-∞"
+Variable: 'WordTextDimensions' of type 'Microsoft.Xna.Framework.Vector2' is a complex object with child properties and has value: 25  13
+
